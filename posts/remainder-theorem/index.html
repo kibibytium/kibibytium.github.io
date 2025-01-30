@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" class="dark light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https:&#x2F;&#x2F;kibibytium.github.io">
+
+    
+
+    
+    
+    
+    <title>
+         Puzzle of the Egg Basket
+        
+    </title>
+
+        
+            <meta property="og:title" content="Puzzle of the Egg Basket" />
+        
+     
+
+     
+         
+     
+
+     
+         
+    
+
+    
+    
+
+    
+    
+        <link href=https://kibibytium.github.io/fonts.css rel="stylesheet" />
+    
+
+    
+    
+
+    
+    
+
+    
+    
+        <script src=https://kibibytium.github.io/js/toc.js></script>
+    
+
+    
+    
+
+    
+        
+            <script>
+            MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$']],
+                packages: ["base", "ams"]
+              }
+            };
+            </script>
+        
+        <script type="text/javascript" id="MathJax-script" async
+          src="/mathjax/tex-chtml-full.js">
+        </script>
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="(KiB)ibytium" href="https://kibibytium.github.io/atom.xml">
+
+
+    
+    
+        <link rel="stylesheet" type="text/css" href=https://kibibytium.github.io/theme/light.css />
+        <link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://kibibytium.github.io/theme/dark.css" />
+    
+
+    <!-- Set the correct theme in the script -->
+    <script src=https://kibibytium.github.io/js/themetoggle.js></script>
+    
+        <script>setTheme(getSavedTheme());</script>
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href=https://kibibytium.github.io/main.css />
+
+    
+
+    <script src=https://kibibytium.github.io/js/mermaid.js></script>
+
+    
+        <script defer src="https://kibibytium.github.io/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script></head>
+
+
+<body>
+    <div class="content">
+        <header>
+    <div class="main">
+        
+            <a href=https:&#x2F;&#x2F;kibibytium.github.io>(KiB)ibytium</a>
+        
+
+
+        <div class="socials">
+            
+            <a rel="me" href="https:&#x2F;&#x2F;github.com&#x2F;kibibytium&#x2F;" class="social">
+                <img alt=github src=https://kibibytium.github.io/social_icons/github.svg>
+            </a>
+            
+        </div>
+    </div>
+
+    <nav>
+        
+            <a href=https://kibibytium.github.io/posts style="margin-left: 0.25em">&#x2F;posts</a>
+        
+            <a href=https://kibibytium.github.io/about style="margin-left: 0.25em">&#x2F;about</a>
+        
+            <a href=https://kibibytium.github.io/tags style="margin-left: 0.25em">&#x2F;tags</a>
+        
+
+        
+        <button 
+            id="search-button"
+            class="search-button"
+            title="$SHORTCUT to open search"
+        >
+            <img 
+                src="https://kibibytium.github.io/search.svg" 
+                alt="Search" 
+                class="search-icon"
+            >
+        </button>
+
+        <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+            <div id="modal-content">
+                <h1 id="modalTitle" class="page-header">Search</h1>
+                <div id="searchBar">
+                    <input 
+                        id="searchInput" 
+                        role="combobox" 
+                        autocomplete="off" 
+                        spellcheck="false" 
+                        aria-expanded="false" 
+                        aria-controls="results-container" 
+                        placeholder="Search..."
+                    />
+                    <button 
+                        id="clear-search" 
+                        class="clear-button"
+                        title="Clear search"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="results-container">
+                    <div id="results-info">
+                        <span id="zero_results" style="display: none;">No results</span>
+                        <span id="one_result" style="display: none;">1 result</span>
+                        <span id="many_results" style="display: none;">$NUMBER results</span>
+                    </div>
+                    <div id="results" role="listbox"></div>
+                </div>
+            </div>
+        </div>
+        
+
+        
+            <a id="dark-mode-toggle" onclick="toggleTheme(); event.preventDefault();" href="#">
+                <img src=https://kibibytium.github.io/feather/sun.svg id="sun-icon" style="filter: invert(1);" alt="Light" />
+                <img src=https://kibibytium.github.io/feather/moon.svg id="moon-icon" alt="Dark" />
+            </a>
+
+            <!-- Inititialize the theme toggle icons -->
+            <script>updateItemToggleTheme()</script>
+        
+    </nav>
+</header>
+
+
+        
+        
+    
+<main>
+    <article>
+        <div class="title">
+            
+            
+    <div class="page-header">
+        Puzzle of the Egg Basket<span class="primary-color" style="font-size: 1.6em">.</span>
+    </div>
+
+
+                <div class="meta">
+                    
+                        Posted on <time>2024-04-06</time>
+                    
+
+                    
+                        :: Updated on <time>2025-01-28</time>
+                    
+
+                    
+
+                    
+                    
+                            <span class="tags-label"> :: Tags:</span>
+                            <span class="tags">
+                                    <a href="https://kibibytium.github.io/tags/puzzle/" class="post-tag">puzzle</a>, 
+                                
+                                    <a href="https://kibibytium.github.io/tags/theorem/" class="post-tag">theorem</a>, 
+                                
+                                    <a href="https://kibibytium.github.io/tags/mathematics/" class="post-tag">mathematics</a>
+                                
+                            </span>
+                    
+
+                    
+                    
+
+                    
+
+                </div>
+        </div>
+
+        
+
+        
+        
+        
+            <div class="toc-container">
+                <h1 class="toc-title">Table of Contents</h1>
+                <ul class="toc-list">
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#the-puzzle">The Puzzle</a>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#the-explanation">The explanation</a>
+                            
+                                <ul>
+                                    
+                                        <li>
+                                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#a-naive-approach">A naive approach</a>
+                                        </li>
+
+                                        
+                                    
+                                        <li>
+                                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#an-educated-approach">An educated approach</a>
+                                        </li>
+
+                                        
+                                    
+                                </ul>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#here-be-mathematics">Here be Mathematics</a>
+                            
+                                <ul>
+                                    
+                                        <li>
+                                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#a-trick-using-congruence-relations">A trick using congruence relations</a>
+                                        </li>
+
+                                        
+                                    
+                                </ul>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#the-chinese-remainder-theorem">The Chinese Remainder Theorem</a>
+                            
+                                <ul>
+                                    
+                                        <li>
+                                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#theorem">Theorem</a>
+                                        </li>
+
+                                        
+                                    
+                                        <li>
+                                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#proof-of-existence-by-construction">Proof of existence by construction</a>
+                                        </li>
+
+                                        
+                                    
+                                        <li>
+                                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#remarks">remarks</a>
+                                        </li>
+
+                                        
+                                    
+                                </ul>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/remainder-theorem/#application-of-the-theorem">Application of the theorem</a>
+                            
+                        </li>
+                    
+                </ul>
+            </div>
+        
+        
+
+        <section class="body">
+            <h2 id="the-puzzle"><a class="zola-anchor" href="#the-puzzle" aria-label="Anchor link for: the-puzzle">The Puzzle</a></h2>
+<p>A woman goes to the market with a basket full of eggs. On her way, a horse bumps into her, causing her to drop the
+basket and break all the eggs. The horse's owner feels guilty and asks how many eggs she had so he can compensate her.
+She replies:</p>
+<blockquote>
+<p>"I don't remember the exact number of eggs, but I do remember this:</p>
+<ul>
+<li>When I tried to group the eggs two at a time, there was one egg left over.</li>
+<li>The same happened when I grouped them three at a time, four at a time, five at a time, and six at a time—there was
+always one egg left over.</li>
+<li>However, when I grouped them seven at a time, there were no eggs left over."</li>
+</ul>
+</blockquote>
+<p>What is the smallest number of eggs she could have had?</p>
+<h2 id="the-explanation"><a class="zola-anchor" href="#the-explanation" aria-label="Anchor link for: the-explanation">The explanation</a></h2>
+<p>We have to search for a number that is divisible by seven but always leaves a remainder of one when divided by $2, 3, 4,
+5$, or $6$. So your first question should be: why should such a number exist? Can I define arbitrary conditions of
+remainders, as above in the puzzle and find solutions for them, or is this puzzle unique in some way?</p>
+<p>It is fairly easy to find a number not divisible by any of the integers $2$ to $6$ with a reminder of $1$. Whether it
+is divisible by $7$, is a different story. An answer to this question is provided by the
+"Chinese remainder theorem" and I will discuss it a bit further down below.</p>
+<p>Keep in mind that solving the puzzle is straightforward, but I’m more interested in a formal approach.
+Specifically, I’m looking for a method to determine whether a general solution exists, along with a
+formula or algorithmic approach to compute it.</p>
+<p>Naturally, I understand that the abstract mathematical questions I posed above are not most people's first questions
+when one encounters this puzzle, so I will start by presenting the direct easy solution first.</p>
+<h3 id="a-naive-approach"><a class="zola-anchor" href="#a-naive-approach" aria-label="Anchor link for: a-naive-approach">A naive approach</a></h3>
+<p>Consider $6! =720$ which by definition is divisible by the integers $2$ to $6$, and add one to it.
+Now you have constructed an integer which leaves a remainder of $1$ when divided by $2,3,4,5,$ or $6$ and therefore
+satisfies the first of the puzzle's conditions. Coincidentally, $(721)$ is also divisible by $7$, but it does not
+solve the puzzle, because it is not the smallest possible solution.</p>
+<h3 id="an-educated-approach"><a class="zola-anchor" href="#an-educated-approach" aria-label="Anchor link for: an-educated-approach">An educated approach</a></h3>
+<p>The idea is simple: compute the <a href="https://en.wikipedia.org/wiki/Least_common_multiple">least common multiple</a>
+of the integers $2,3,4,5,6$ and add $1$ to it. Then check whether the result is divisible by 7.
+If not, find the next smallest common multiple of $2,3,4,5,6$ add 1 to it, then divide by seven and so on.
+The first number divisible by $7$ is the solution to the puzzle, and it's $301$!</p>
+<h2 id="here-be-mathematics"><a class="zola-anchor" href="#here-be-mathematics" aria-label="Anchor link for: here-be-mathematics">Here be Mathematics</a></h2>
+<p>Let's start by writing the idea above formally. The least common multiple of these integers is:</p>
+<p>$$
+\text{lcm}(2,3,4,5,6) = 2 \cdot 3 \cdot 2 \cdot 5 = 60
+$$</p>
+<p>Using a congruence relation, we can write a general form for the solution: The solution - let's call it $x$ - has the
+form $x = 60n +1$ for the smallest integer $n$ satisfying:</p>
+<p>$$
+60n + 1 \equiv 0 \quad (\text{mod} 7)
+$$</p>
+<p>The first multiple of $7$ that can be written in this form is $301$ which we get for $n=5$.</p>
+<h3 id="a-trick-using-congruence-relations"><a class="zola-anchor" href="#a-trick-using-congruence-relations" aria-label="Anchor link for: a-trick-using-congruence-relations">A trick using congruence relations</a></h3>
+<p>There is a simple trick that makes use of <a href="https://en.wikipedia.org/wiki/Congruence_relation">congruence relations</a>.
+This trick makes the arithmetic - and therefore the process of trial and error - for finding $n$ a bit easier.</p>
+<p>Consider the following equivalent statements:</p>
+<div>
+$$
+\begin{aligned}
+60 &\equiv 4 \quad &(\text{mod } 7)\\
+60n &\equiv 4n \quad &(\text{mod } 7)\\
+60n + 1 &\equiv 4n +1 \quad &(\text{mod } 7)
+\end{aligned}
+$$
+</div>
+<p>The first n which makes $( 4n +1$) divisible by 7 solves the puzzle, which is of course $5$.</p>
+<div class="note-container">
+  
+    <div class="note-header">
+      
+        <div class="note-icon">
+        <p>Note</p>
+
+        </div>
+      
+    </div>
+    <div class="note-content">
+      <p>These statements are equivalent because congruence relations are compatible with algebraic
+structures. In this case the algebraic structure is the integer ring $\mathbb{Z}$, with the conventional addition and
+multiplication.</p>
+
+    </div>
+  
+</div>
+<h2 id="the-chinese-remainder-theorem"><a class="zola-anchor" href="#the-chinese-remainder-theorem" aria-label="Anchor link for: the-chinese-remainder-theorem">The Chinese Remainder Theorem</a></h2>
+<h3 id="theorem"><a class="zola-anchor" href="#theorem" aria-label="Anchor link for: theorem"><em>Theorem</em></a></h3>
+<p>Given a system of $k$ congruence relations with pairwise
+coprime moduli $m_1,\cdots, m_k$ then there exists a unique solution
+up to $ \text{mod } M$, where $M= m_1m_2\cdots m_k$.</p>
+<div>
+$$
+\begin{aligned}
+x &\equiv a_1 \quad &(\text{mod } m_1)\\
+x &\equiv a_2 \quad &(\text{mod } m_2)\\
+\vdots\\
+x &\equiv a_k \quad &(\text{mod } m_k)
+\end{aligned}
+$$
+</div>
+<p>Furthermore, if $0 \le a_i \lt m_i: \forall i$, then there exists one and only one $0 \le x \lt M$ and $a_i$ is the
+remainder of the Euclidean division of $x$ by $m_i$</p>
+<hr />
+<p>This is one of multiple possible statements of the theorem. It is of course a modern formulation
+but the theorem originates from 5th century china, in a book on mathematics.
+It appeared as conjecture without proof or algorithm.</p>
+<p>Great… how does this help us in actually <em>finding</em> the solution? Well, the theorem has a proof by construction.
+This means that we can prove the theorem by constructing a solution for a general form of the puzzle above.</p>
+<h3 id="proof-of-existence-by-construction"><a class="zola-anchor" href="#proof-of-existence-by-construction" aria-label="Anchor link for: proof-of-existence-by-construction">Proof of existence by construction</a></h3>
+<p>Let $M_i = \frac{M}{m_i} = m_1 \cdot m_2 \cdots m_{i-1} \cdot m_{i+1} \cdots m_k$.
+Since all the moduli $(m_i$) are coprime, then it is easy to see
+that the greatest common divisor of $(M_i$) and $(m_i$) is $(1$). Write:</p>
+<p>$$
+\text{gcd}(M_i,m_i) = 1
+$$</p>
+<p>A well known result in number theory says that if two integers are coprime - as is the case with $(M_i, m_i$), then
+there exists an integer<sup class="footnote-reference"><a href="#1">1</a></sup> - call it $x_i$ - such that:</p>
+<p>$$
+x_iM_i \equiv 1 \quad (\text{mod } m_i)
+$$</p>
+<p>For any other index $j \neq i$, $m_j$ will divide $M_i$ by definition. In other words:</p>
+<p>$$
+x_iM_i \equiv 0 \quad (\text{mod } m_j)\quad \forall j\neq i
+$$</p>
+<p>This is all we need to construct an integer $x$ which solves the system of congruence relations and proves the
+theorem. Consider:</p>
+<p>$$
+x = \sum_{i=1}^{k} x_i M_i a_i
+$$</p>
+<p>and check for any $i$:</p>
+<div>
+$$
+\begin{aligned}
+x \quad \text{mod} \quad m_i &= \sum_{j=1}^{k} x_j M_j a_j \quad &(\text{mod } m_i)\\
+&= 0 + 0 + \cdots + x_iM_ia_i + \cdots + 0 \quad &(\text{mod } m_i)\\
+&= x_iM_ia_i \quad &(\text{mod } m_i)
+\end{aligned}
+$$
+</div>
+so in short:
+$$
+x \equiv x_iM_ia_i \quad (\text{mod } m_i)
+$$
+<p>Since we already know that $x_iM_i \equiv 1 \quad (\text{mod } m_i)$, the equivalence above simplifies to:</p>
+<p>$$
+x \equiv a_i \quad (\text{mod } m_i)
+$$</p>
+<p>which proves the statement of the theorem.</p>
+<h3 id="remarks"><a class="zola-anchor" href="#remarks" aria-label="Anchor link for: remarks">remarks</a></h3>
+<p>In the proof above we have constructed a solution $x$ for a system of congruences. However, our solution still relies
+on an existence theorem for all the $x_i$. Unless we find a systematic way to compute these integers, we would not
+be able to find a solution to the puzzle easily.</p>
+<p>With that in mind, consider again the statement:</p>
+<p>$$
+x_iM_i \equiv 1 \quad (\text{mod } m_i)
+$$</p>
+<p>$x_iM_i$ divided by $m_i$ will have a remainder of 1. Meaning that $x_iM_i \pm 1 $ is a multiple of $m_i$.</p>
+<p>Write:</p>
+<div>
+$$
+\begin{aligned}
+x_iM_i - 1 &= m_i\\
+\end{aligned}
+$$
+</div>
+<p>Without loss of generality we can write this as:</p>
+<div>
+$$
+\begin{equation}
+1 = x_iM_i + sm_i
+\end{equation}
+$$
+</div>
+<div class="note-container">
+  
+    <div class="note-header">
+      
+        <div class="note-icon">
+        <p>Note</p>
+
+        </div>
+      
+    </div>
+    <div class="note-content">
+      <p>Note that 1 is the greatest common divisor of $x_iM_i$ and $m_i$ and the equation above is called <em>Bézout's
+identity</em>.</p>
+<p>The factors $x_i, s$ are called Bézout's coefficients, and they are computed using
+the extended Euclidean algorithm of division at the step before last.</p>
+<p>Bézout's identity and the Euclidean algorithm warrant an article by themselves and are therefore beyond the scope of
+this post.</p>
+
+    </div>
+  
+</div>
+<h2 id="application-of-the-theorem"><a class="zola-anchor" href="#application-of-the-theorem" aria-label="Anchor link for: application-of-the-theorem">Application of the theorem</a></h2>
+<p>First we need to formulate the puzzle in a way that is compatible with the theorem. We could write:</p>
+<div>
+$$
+\begin{aligned}
+x &\equiv 1 \quad &(\text{mod } 2)\\
+x &\equiv 1 \quad &(\text{mod } 3)\\
+x &\equiv 1 \quad &(\text{mod } 4)\\
+x &\equiv 1 \quad &(\text{mod } 5)\\
+x &\equiv 1 \quad &(\text{mod } 6)\\
+x &\equiv 0 \quad &(\text{mod } 7)\\
+\end{aligned}
+$$
+</div>
+<p>We can improve on this by using the least common multiple of these integers,$60$, since it encodes the first five
+congruences:</p>
+<div>
+$$
+\begin{aligned}
+x &\equiv 1 \quad &(\text{mod } 60)\\
+x &\equiv 0 \quad &(\text{mod } 7)\\
+\end{aligned}
+$$
+</div>
+<p>$60$ and $7$ are coprime, and the divisors $1$ and $0$ are less than $60$ and $7$ respectively.
+Applying the theorem, the solution becomes:</p>
+<p>$$
+x \equiv x_1 M_1 a_1 + x_2 M_2 a_2 \quad (\text{mod } 7\cdot60)
+$$</p>
+<p>where</p>
+<div>
+$$
+\begin{aligned}
+M_1 &= 7\\
+M_2 &= 60\\
+a_1 &= 1\\
+a_2 &= 0\\
+\end{aligned}
+$$
+</div>
+<p>$$
+\Rightarrow x \equiv 7x_1 + 0 \quad (\text{mod } 420)
+$$</p>
+<p>Now it only remains to compute Bézout's coefficients for the identity:</p>
+<p>$$
+1 = 7x_1 + s60
+$$</p>
+<p>As mentioned before, those coefficients are computed from the Euclidean algorithm of division. In this case we have:</p>
+<p>$$
+1 = 7(-17)  + (2)60
+$$</p>
+<p>$$
+\Rightarrow x \equiv -119 \quad (\text{mod } 420)
+$$</p>
+<p>The solution $x$ is unique up to modulo $420$, meaning that there are multiple solutions, which are $420$ apart.
+We know from the theorem that there is one and only one solution between $0$ and $420$:</p>
+<p>$$
+\Rightarrow \boxed{x = -119 + 420 = 301}
+$$</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>$(x_i)$ is called a modular multiplicative inverse of $M_i$, and it exists if and only iff both integers are
+coprime.</p>
+</div>
+
+        </section>
+    </article>
+</main>
+
+
+
+        
+            
+        
+
+        
+    </div>
+</body>
+
+</html>

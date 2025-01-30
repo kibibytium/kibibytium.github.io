@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://kibibytium.github.io/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/about/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/posts/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/posts/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/posts/remainder-theorem/</loc>
+        <lastmod>2025-01-28</lastmod>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/tags/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/tags/mathematics/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/tags/puzzle/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/tags/theorem/</loc>
+    </url>
+</urlset>
