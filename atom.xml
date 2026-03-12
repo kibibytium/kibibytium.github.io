@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>(KiB)ibytium</title>
+    <link rel="self" type="application/atom+xml" href="https://kibibytium.github.io/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://kibibytium.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-03-12T00:00:00+00:00</updated>
+    <id>https://kibibytium.github.io/atom.xml</id>
+    <entry xml:lang="en">
+        <title>The Setup Architecture of Nextcloud&#x27;s AppApi Deploy Daemon</title>
+        <published>2026-03-12T00:00:00+00:00</published>
+        <updated>2026-03-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://kibibytium.github.io/posts/nextcloud-appapi-arch/"/>
+        <id>https://kibibytium.github.io/posts/nextcloud-appapi-arch/</id>
+        
+        <content type="html" xml:base="https://kibibytium.github.io/posts/nextcloud-appapi-arch/">&lt;h2 id=&quot;the-goal&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#the-goal&quot; aria-label=&quot;Anchor link for: the-goal&quot;&gt;The Goal&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;This document explains the required architecture of a Nextcloud installation in order to be able to deploy External Apps (ExApps) via the new AppApi.&lt;&#x2F;p&gt;
+&lt;p&gt;This is less of a how-to guide and more about teaching you how to catch fish (docker is a whale... get it?. Sorry)&lt;&#x2F;p&gt;
+&lt;p&gt;The setup can be confusing because several containers and services must communicate with each other correctly. This guide aims to provide a clear overview of the required architecture and describes which containers need to connect to each other and how that communication is configured.&lt;&#x2F;p&gt;
+&lt;p&gt;The HaRP proxy itself runs in a docker container, but the rest of the parts do not have to. For simplicity&#x27;s sake however, you can
+assume that each of the parts listed below runs in its own container.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;prerequisites&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#prerequisites&quot; aria-label=&quot;Anchor link for: prerequisites&quot;&gt;Prerequisites&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Nextcloud: Your nextcloud installation&lt;&#x2F;li&gt;
+&lt;li&gt;Reverse Proxy: The web server through which you access nextcloud. Whether Nginx, Apache, Traefik, Caddy, NPM, etc.&lt;&#x2F;li&gt;
+&lt;li&gt;HaRP: installed as docker container.&lt;&#x2F;li&gt;
+&lt;li&gt;A docker network for ExApps installed by HaRP&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;a-note&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-note&quot; aria-label=&quot;Anchor link for: a-note&quot;&gt;A Note&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;This is one of these things that you have to figure our through trial and error.&lt;&#x2F;p&gt;
+&lt;p&gt;After you have installed HaRP, try registering it in your Nextcloud under Admin Settings &amp;gt; AppApi &amp;gt; Deploy Daemon.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use the &quot;Check Connection&quot; button when registering the daemon to make sure Nextcloud can reach it.&lt;&#x2F;li&gt;
+&lt;li&gt;Click the three dots next the deploy daemon and try the &quot;Test Deploy&quot;&lt;&#x2F;li&gt;
+&lt;li&gt;Check Nextcloud&#x27;s Logs while the test deploy runs.&lt;&#x2F;li&gt;
+&lt;li&gt;Check the logs from the test container. It is ususally called &lt;code&gt;nc_app_test-deploy&lt;&#x2F;code&gt;. You can use &lt;code&gt;docker logs -f nc_app_test-deploy&lt;&#x2F;code&gt;. This will tell you if the deployed app fails to reach HaRP or Nextcloud.&lt;&#x2F;li&gt;
+&lt;li&gt;Check the logs from the HaRP container.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;networking&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#networking&quot; aria-label=&quot;Anchor link for: networking&quot;&gt;Networking&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;The reverse proxy obviously must be able to reach both Nextcloud and HaRP.&lt;&#x2F;li&gt;
+&lt;li&gt;Nextcloud must be able to reach HaRP, for example internlly on a docker network. HaRP does not care if is it installed on a different host machine than Nextcloud and allows access via HTTPS.&lt;&#x2F;li&gt;
+&lt;li&gt;HaRP must be able to reach the apps it deploys. When you register the deploy daemon in Nextcloud, you can specify any docker network to be used for this.&lt;&#x2F;li&gt;
+&lt;li&gt;HaRP must be able to access Nextcloud using its &lt;em&gt;&lt;strong&gt;public URL&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;. If you are using non-FQDNS, or simply, if HaRP cannot resolve your Nextcloud&#x27;s URL, make sure to configure its &lt;code&gt;&#x2F;etc&#x2F;hosts&lt;&#x2F;code&gt; file or configure the container to use a DNS server which can resolve the domain.&lt;&#x2F;li&gt;
+&lt;li&gt;The deployed ExApps must be able to access Nextcloud via the public URL as well.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;reverse-proxy&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#reverse-proxy&quot; aria-label=&quot;Anchor link for: reverse-proxy&quot;&gt;Reverse Proxy&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Routes requsts to Nextcloud: &lt;code&gt;https:&#x2F;&#x2F;cloud.mydomain.com&#x2F;index.php&#x2F;...&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Routes requests to the subpath &#x2F;exapps to HaRP at port 8780 (&lt;code&gt;https:&#x2F;&#x2F;cloud.mydomain.com&#x2F;exapps&#x2F;...&lt;&#x2F;code&gt;)&lt;&#x2F;li&gt;
+&lt;li&gt;Sets correct headers for HaRP: like, &lt;code&gt;Host&lt;&#x2F;code&gt; and &lt;code&gt;X-Forwarded-For&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;a-diagram&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-diagram&quot; aria-label=&quot;Anchor link for: a-diagram&quot;&gt;A Diagram&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Here is a diagram:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;nc-harp-net-flow.png&quot; alt=&quot;diagram&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;more-details&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#more-details&quot; aria-label=&quot;Anchor link for: more-details&quot;&gt;More Details&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;For more concrete examples and up-to-date documentation, please refer to Nextcloud&#x27;s HaRP repository here: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;nextcloud&#x2F;HaRP&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;nextcloud&#x2F;HaRP&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;!--@startuml
+skinparam actorStyle awesome
+autonumber
+
+actor User
+participant &quot;Reverse Proxy&quot; as Proxy
+participant &quot;Nextcloud&quot; as NC
+participant &quot;HaRP (Daemon)&quot; as HaRP
+participant &quot;ExApp Container&quot; as App
+
+== Standard Traffic ==
+User -&gt; Proxy: Request cloud.mydomain.com
+Proxy -&gt; NC: Forward to Nextcloud (Port 80&#x2F;443)
+NC -&gt; User: Response
+
+== ExApp Traffic ==
+User -&gt; Proxy: Request cloud.mydomain.com&#x2F;exapps&#x2F;my-app
+Proxy -&gt; HaRP: Forward &#x2F;exapps to Port 8780
+HaRP -&gt; App: Internal Docker Network routing
+App -&gt; HaRP: Response
+HaRP -&gt; User: Response via Proxy
+
+== HaRP&#x2F;ExApp to Nextcloud ==
+note over HaRP, App: Both need to reach Nextcloud via Public URL
+HaRP -&gt; Proxy: Auth Check (https:&#x2F;&#x2F;cloud.mydomain.com)
+App -&gt; Proxy: API Call (https:&#x2F;&#x2F;cloud.mydomain.com)
+Proxy -&gt; NC: Internal Forward
+@enduml--&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Puzzle of the Egg Basket</title>
+        <published>2024-04-06T00:00:00+00:00</published>
+        <updated>2025-01-28T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://kibibytium.github.io/posts/remainder-theorem/"/>
+        <id>https://kibibytium.github.io/posts/remainder-theorem/</id>
+        
+        <content type="html" xml:base="https://kibibytium.github.io/posts/remainder-theorem/">&lt;h2 id=&quot;the-puzzle&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#the-puzzle&quot; aria-label=&quot;Anchor link for: the-puzzle&quot;&gt;The Puzzle&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;A woman goes to the market with a basket full of eggs. On her way, a horse bumps into her, causing her to drop the
+basket and break all the eggs. The horse&#x27;s owner feels guilty and asks how many eggs she had so he can compensate her.
+She replies:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&quot;I don&#x27;t remember the exact number of eggs, but I do remember this:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;When I tried to group the eggs two at a time, there was one egg left over.&lt;&#x2F;li&gt;
+&lt;li&gt;The same happened when I grouped them three at a time, four at a time, five at a time, and six at a time—there was
+always one egg left over.&lt;&#x2F;li&gt;
+&lt;li&gt;However, when I grouped them seven at a time, there were no eggs left over.&quot;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;What is the smallest number of eggs she could have had?&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-explanation&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#the-explanation&quot; aria-label=&quot;Anchor link for: the-explanation&quot;&gt;The explanation&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;We have to search for a number that is divisible by seven but always leaves a remainder of one when divided by $2, 3, 4,
+5$, or $6$. So your first question should be: why should such a number exist? Can I define arbitrary conditions of
+remainders, as above in the puzzle and find solutions for them, or is this puzzle unique in some way?&lt;&#x2F;p&gt;
+&lt;p&gt;It is fairly easy to find a number not divisible by any of the integers $2$ to $6$ with a reminder of $1$. Whether it
+is divisible by $7$, is a different story. An answer to this question is provided by the
+&quot;Chinese remainder theorem&quot; and I will discuss it a bit further down below.&lt;&#x2F;p&gt;
+&lt;p&gt;Keep in mind that solving the puzzle is straightforward, but I’m more interested in a formal approach.
+Specifically, I’m looking for a method to determine whether a general solution exists, along with a
+formula or algorithmic approach to compute it.&lt;&#x2F;p&gt;
+&lt;p&gt;Naturally, I realize that the abstract mathematical questions I posed above are not the first questions which come to
+mind when one encounters this puzzle, so I will start by presenting the direct easy solution first.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;a-naive-approach&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-naive-approach&quot; aria-label=&quot;Anchor link for: a-naive-approach&quot;&gt;A naive approach&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Consider $6! =720$ which by definition is divisible by the integers $2$ to $6$, and add one to it.
+Now you have constructed an integer which leaves a remainder of $1$ when divided by $2,3,4,5,$ or $6$ and therefore
+satisfies the first of the puzzle&#x27;s conditions. Coincidentally, $(721)$ is also divisible by $7$, but it does not
+solve the puzzle, because it is not the smallest possible solution.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;an-educated-approach&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#an-educated-approach&quot; aria-label=&quot;Anchor link for: an-educated-approach&quot;&gt;An educated approach&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The idea is simple: compute the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Least_common_multiple&quot;&gt;least common multiple&lt;&#x2F;a&gt;
+of the integers $2,3,4,5,6$ and add $1$ to it. Then check whether the result is divisible by 7.
+If not, find the next smallest common multiple of $2,3,4,5,6$ add 1 to it, then divide by seven and so on.
+The first number divisible by $7$ is the solution to the puzzle, and it&#x27;s $301$!&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;here-be-mathematics&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#here-be-mathematics&quot; aria-label=&quot;Anchor link for: here-be-mathematics&quot;&gt;Here be Mathematics&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Let&#x27;s start by writing the idea above formally. The least common multiple of these integers is:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+\text{lcm}(2,3,4,5,6) = 2 \cdot 3 \cdot 2 \cdot 5 = 60
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;Using a congruence relation, we can write a general form for the solution: The solution - let&#x27;s call it $x$ - has the
+form $x = 60n +1$ for the smallest integer $n$ satisfying:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+60n + 1 \equiv 0 \quad (\text{mod} 7)
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;The first multiple of $7$ that can be written in this form is $301$ which we get for $n=5$.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;a-trick-using-congruence-relations&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-trick-using-congruence-relations&quot; aria-label=&quot;Anchor link for: a-trick-using-congruence-relations&quot;&gt;A trick using congruence relations&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;There is a simple trick that makes use of &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Congruence_relation&quot;&gt;congruence relations&lt;&#x2F;a&gt;.
+This trick makes the arithmetic - and therefore the process of trial and error - for finding $n$ a bit easier.&lt;&#x2F;p&gt;
+&lt;p&gt;Consider the following equivalent statements:&lt;&#x2F;p&gt;
+&lt;div&gt;
+$$
+\begin{aligned}
+60 &amp;\equiv 4 \quad &amp;(\text{mod } 7)\\
+60n &amp;\equiv 4n \quad &amp;(\text{mod } 7)\\
+60n + 1 &amp;\equiv 4n +1 \quad &amp;(\text{mod } 7)
+\end{aligned}
+$$
+&lt;&#x2F;div&gt;
+&lt;p&gt;The first n which makes $( 4n +1$) divisible by 7 solves the puzzle, which is of course $5$.&lt;&#x2F;p&gt;
+&lt;div class=&quot;note-container&quot;&gt;
+  
+    &lt;div class=&quot;note-header&quot;&gt;
+      
+        &lt;div class=&quot;note-icon&quot;&gt;
+        &lt;p&gt;Note&lt;&#x2F;p&gt;
+
+        &lt;&#x2F;div&gt;
+      
+    &lt;&#x2F;div&gt;
+    &lt;div class=&quot;note-content&quot;&gt;
+      &lt;p&gt;These statements are equivalent because congruence relations are compatible with algebraic
+structures. In this case the algebraic structure is the integer ring $\mathbb{Z}$, with the conventional addition and
+multiplication.&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;div&gt;
+  
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;the-chinese-remainder-theorem&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#the-chinese-remainder-theorem&quot; aria-label=&quot;Anchor link for: the-chinese-remainder-theorem&quot;&gt;The Chinese Remainder Theorem&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;theorem&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#theorem&quot; aria-label=&quot;Anchor link for: theorem&quot;&gt;&lt;em&gt;Theorem&lt;&#x2F;em&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Given a system of $k$ congruence relations with pairwise
+coprime moduli $m_1,\cdots, m_k$ then there exists a unique solution
+up to $ \text{mod } M$, where $M= m_1m_2\cdots m_k$.&lt;&#x2F;p&gt;
+&lt;div&gt;
+$$
+\begin{aligned}
+x &amp;\equiv a_1 \quad &amp;(\text{mod } m_1)\\
+x &amp;\equiv a_2 \quad &amp;(\text{mod } m_2)\\
+\vdots\\
+x &amp;\equiv a_k \quad &amp;(\text{mod } m_k)
+\end{aligned}
+$$
+&lt;&#x2F;div&gt;
+&lt;p&gt;Furthermore, if $0 \le a_i \lt m_i: \forall i$, then there exists one and only one $0 \le x \lt M$ and $a_i$ is the
+remainder of the Euclidean division of $x$ by $m_i$&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;This is one of multiple possible statements of the theorem. It is of course a modern formulation
+but the theorem originates from 5th century china, in a book on mathematics.
+It appeared as conjecture without proof or algorithm.&lt;&#x2F;p&gt;
+&lt;p&gt;Great… how does this help us in actually &lt;em&gt;finding&lt;&#x2F;em&gt; the solution? Well, the theorem has a proof by construction.
+This means that we can prove the theorem by constructing a solution for a general form of the puzzle above.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;proof-of-existence-by-construction&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#proof-of-existence-by-construction&quot; aria-label=&quot;Anchor link for: proof-of-existence-by-construction&quot;&gt;Proof of existence by construction&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Let $M_i = \frac{M}{m_i} = m_1 \cdot m_2 \cdots m_{i-1} \cdot m_{i+1} \cdots m_k$.
+Since all the moduli $(m_i$) are coprime, then it is easy to see
+that the greatest common divisor of $(M_i$) and $(m_i$) is $(1$). Write:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+\text{gcd}(M_i,m_i) = 1
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;A well known result in number theory says that if two integers are coprime - as is the case with $(M_i, m_i$), then
+there exists an integer&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#1&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt; - call it $x_i$ - such that:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+x_iM_i \equiv 1 \quad (\text{mod } m_i)
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;For any other index $j \neq i$, $m_j$ will divide $M_i$ by definition. In other words:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+x_iM_i \equiv 0 \quad (\text{mod } m_j)\quad \forall j\neq i
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;This is all we need to construct an integer $x$ which solves the system of congruence relations and proves the
+theorem. Consider:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+x = \sum_{i=1}^{k} x_i M_i a_i
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;and check for any $i$:&lt;&#x2F;p&gt;
+&lt;div&gt;
+$$
+\begin{aligned}
+x \quad \text{mod} \quad m_i &amp;= \sum_{j=1}^{k} x_j M_j a_j \quad &amp;(\text{mod } m_i)\\
+&amp;= 0 + 0 + \cdots + x_iM_ia_i + \cdots + 0 \quad &amp;(\text{mod } m_i)\\
+&amp;= x_iM_ia_i \quad &amp;(\text{mod } m_i)
+\end{aligned}
+$$
+&lt;&#x2F;div&gt;
+so in short:
+$$
+x \equiv x_iM_ia_i \quad (\text{mod } m_i)
+$$
+&lt;p&gt;Since we already know that $x_iM_i \equiv 1 \quad (\text{mod } m_i)$, the equivalence above simplifies to:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+x \equiv a_i \quad (\text{mod } m_i)
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;which proves the statement of the theorem.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;remarks&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#remarks&quot; aria-label=&quot;Anchor link for: remarks&quot;&gt;remarks&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;In the proof above we have constructed a solution $x$ for a system of congruences. However, our solution still relies
+on an existence theorem for all the $x_i$. Unless we find a systematic way to compute these integers, we would not
+be able to find a solution to the puzzle easily.&lt;&#x2F;p&gt;
+&lt;p&gt;With that in mind, consider again the statement:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+x_iM_i \equiv 1 \quad (\text{mod } m_i)
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;$x_iM_i$ divided by $m_i$ will have a remainder of 1. Meaning that $x_iM_i \pm 1 $ is a multiple of $m_i$.&lt;&#x2F;p&gt;
+&lt;p&gt;Write:&lt;&#x2F;p&gt;
+&lt;div&gt;
+$$
+\begin{aligned}
+x_iM_i - 1 &amp;= m_i\\
+\end{aligned}
+$$
+&lt;&#x2F;div&gt;
+&lt;p&gt;Without loss of generality we can write this as:&lt;&#x2F;p&gt;
+&lt;div&gt;
+$$
+\begin{equation}
+1 = x_iM_i + sm_i
+\end{equation}
+$$
+&lt;&#x2F;div&gt;
+&lt;div class=&quot;note-container&quot;&gt;
+  
+    &lt;div class=&quot;note-header&quot;&gt;
+      
+        &lt;div class=&quot;note-icon&quot;&gt;
+        &lt;p&gt;Note&lt;&#x2F;p&gt;
+
+        &lt;&#x2F;div&gt;
+      
+    &lt;&#x2F;div&gt;
+    &lt;div class=&quot;note-content&quot;&gt;
+      &lt;p&gt;Note that 1 is the greatest common divisor of $x_iM_i$ and $m_i$ and the equation above is called &lt;em&gt;Bézout&#x27;s
+identity&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The factors $x_i, s$ are called Bézout&#x27;s coefficients, and they are computed using
+the extended Euclidean algorithm of division at the step before last.&lt;&#x2F;p&gt;
+&lt;p&gt;Bézout&#x27;s identity and the Euclidean algorithm warrant an article by themselves and are therefore beyond the scope of
+this post.&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;div&gt;
+  
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;application-of-the-theorem&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#application-of-the-theorem&quot; aria-label=&quot;Anchor link for: application-of-the-theorem&quot;&gt;Application of the theorem&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;First we need to formulate the puzzle in a way that is compatible with the theorem. We could write:&lt;&#x2F;p&gt;
+&lt;div&gt;
+$$
+\begin{aligned}
+x &amp;\equiv 1 \quad &amp;(\text{mod } 2)\\
+x &amp;\equiv 1 \quad &amp;(\text{mod } 3)\\
+x &amp;\equiv 1 \quad &amp;(\text{mod } 4)\\
+x &amp;\equiv 1 \quad &amp;(\text{mod } 5)\\
+x &amp;\equiv 1 \quad &amp;(\text{mod } 6)\\
+x &amp;\equiv 0 \quad &amp;(\text{mod } 7)\\
+\end{aligned}
+$$
+&lt;&#x2F;div&gt;
+&lt;p&gt;We can improve on this by using the least common multiple of these integers,$60$, since it encodes the first five
+congruences:&lt;&#x2F;p&gt;
+&lt;div&gt;
+$$
+\begin{aligned}
+x &amp;\equiv 1 \quad &amp;(\text{mod } 60)\\
+x &amp;\equiv 0 \quad &amp;(\text{mod } 7)\\
+\end{aligned}
+$$
+&lt;&#x2F;div&gt;
+&lt;p&gt;$60$ and $7$ are coprime, and the divisors $1$ and $0$ are less than $60$ and $7$ respectively.
+Applying the theorem, the solution becomes:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+x \equiv x_1 M_1 a_1 + x_2 M_2 a_2 \quad (\text{mod } 7\cdot60)
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;where&lt;&#x2F;p&gt;
+&lt;div&gt;
+$$
+\begin{aligned}
+M_1 &amp;= 7\\
+M_2 &amp;= 60\\
+a_1 &amp;= 1\\
+a_2 &amp;= 0\\
+\end{aligned}
+$$
+&lt;&#x2F;div&gt;
+&lt;p&gt;$$
+\Rightarrow x \equiv 7x_1 + 0 \quad (\text{mod } 420)
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;Now it only remains to compute Bézout&#x27;s coefficients for the identity:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+1 = 7x_1 + s60
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;As mentioned before, those coefficients are computed from the Euclidean algorithm of division. In this case we have:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+1 = 7(-17)  + (2)60
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+\Rightarrow x \equiv -119 \quad (\text{mod } 420)
+$$&lt;&#x2F;p&gt;
+&lt;p&gt;The solution $x$ is unique up to modulo $420$, meaning that there are multiple solutions, which are $420$ apart.
+We know from the theorem that there is one and only one solution between $0$ and $420$:&lt;&#x2F;p&gt;
+&lt;p&gt;$$
+\Rightarrow \boxed{x = -119 + 420 = 301}
+$$&lt;&#x2F;p&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;1&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;1&lt;&#x2F;sup&gt;
+&lt;p&gt;$(x_i)$ is called a modular multiplicative inverse of $M_i$, and it exists if and only iff both integers are
+coprime.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
+</feed>

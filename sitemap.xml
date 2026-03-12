@@ -10,6 +10,10 @@
         <loc>https://kibibytium.github.io/posts/</loc>
     </url>
     <url>
+        <loc>https://kibibytium.github.io/posts/nextcloud-appapi-arch/</loc>
+        <lastmod>2026-03-12</lastmod>
+    </url>
+    <url>
         <loc>https://kibibytium.github.io/posts/page/1/</loc>
     </url>
     <url>
@@ -20,10 +24,22 @@
         <loc>https://kibibytium.github.io/tags/</loc>
     </url>
     <url>
+        <loc>https://kibibytium.github.io/tags/advanced/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/tags/architecture/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/tags/docker/</loc>
+    </url>
+    <url>
         <loc>https://kibibytium.github.io/tags/mathematics/</loc>
     </url>
     <url>
         <loc>https://kibibytium.github.io/tags/puzzle/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/tags/sysadmin/</loc>
     </url>
     <url>
         <loc>https://kibibytium.github.io/tags/theorem/</loc>

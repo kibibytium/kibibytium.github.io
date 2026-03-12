@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" class="dark light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base" content="https:&#x2F;&#x2F;kibibytium.github.io">
+
+    
+
+    
+    
+    
+    <title>
+         The Setup Architecture of Nextcloud&#x27;s AppApi Deploy Daemon
+        
+    </title>
+
+        
+            <meta property="og:title" content="The Setup Architecture of Nextcloud&#x27;s AppApi Deploy Daemon" />
+        
+     
+
+     
+         
+     
+
+     
+         
+    
+
+    
+    
+
+    
+    
+        <link href=https://kibibytium.github.io/fonts.css rel="stylesheet" />
+    
+
+    
+    
+
+    
+    
+
+    
+    
+        <script src=https://kibibytium.github.io/js/toc.js></script>
+    
+
+    
+    
+
+    
+        
+            <script>
+            MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$']],
+                packages: ["base", "ams"]
+              }
+            };
+            </script>
+        
+        <script type="text/javascript" id="MathJax-script" async
+          src="/mathjax/tex-chtml-full.js">
+        </script>
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="(KiB)ibytium" href="https://kibibytium.github.io/atom.xml">
+
+
+    
+    
+        <link rel="stylesheet" type="text/css" href=https://kibibytium.github.io/theme/light.css />
+        <link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://kibibytium.github.io/theme/dark.css" />
+    
+
+    <!-- Set the correct theme in the script -->
+    <script src=https://kibibytium.github.io/js/themetoggle.js></script>
+    
+        <script>setTheme(getSavedTheme());</script>
+    
+
+    <link rel="stylesheet" type="text/css" media="screen" href=https://kibibytium.github.io/main.css />
+
+    
+
+    <script src=https://kibibytium.github.io/js/mermaid.js></script>
+
+    
+        <script defer src="https://kibibytium.github.io/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script></head>
+
+
+<body>
+    <div class="content">
+        <header>
+    <div class="main">
+        
+            <a href=https:&#x2F;&#x2F;kibibytium.github.io>(KiB)ibytium</a>
+        
+
+
+        <div class="socials">
+            
+            <a rel="me" href="https:&#x2F;&#x2F;github.com&#x2F;kibibytium&#x2F;" class="social">
+                <img alt=github src=https://kibibytium.github.io/social_icons/github.svg>
+            </a>
+            
+        </div>
+    </div>
+
+    <nav>
+        
+            <a href=https://kibibytium.github.io/posts style="margin-left: 0.25em">&#x2F;posts</a>
+        
+            <a href=https://kibibytium.github.io/about style="margin-left: 0.25em">&#x2F;about</a>
+        
+            <a href=https://kibibytium.github.io/tags style="margin-left: 0.25em">&#x2F;tags</a>
+        
+
+        
+        <button 
+            id="search-button"
+            class="search-button"
+            title="$SHORTCUT to open search"
+        >
+            <img 
+                src="https://kibibytium.github.io/search.svg" 
+                alt="Search" 
+                class="search-icon"
+            >
+        </button>
+
+        <div id="searchModal" class="search-modal js" role="dialog" aria-labelledby="modalTitle">
+            <div id="modal-content">
+                <h1 id="modalTitle" class="page-header">Search</h1>
+                <div id="searchBar">
+                    <input 
+                        id="searchInput" 
+                        role="combobox" 
+                        autocomplete="off" 
+                        spellcheck="false" 
+                        aria-expanded="false" 
+                        aria-controls="results-container" 
+                        placeholder="Search..."
+                    />
+                    <button 
+                        id="clear-search" 
+                        class="clear-button"
+                        title="Clear search"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="results-container">
+                    <div id="results-info">
+                        <span id="zero_results" style="display: none;">No results</span>
+                        <span id="one_result" style="display: none;">1 result</span>
+                        <span id="many_results" style="display: none;">$NUMBER results</span>
+                    </div>
+                    <div id="results" role="listbox"></div>
+                </div>
+            </div>
+        </div>
+        
+
+        
+            <a id="dark-mode-toggle" onclick="toggleTheme(); event.preventDefault();" href="#">
+                <img src=https://kibibytium.github.io/feather/sun.svg id="sun-icon" style="filter: invert(1);" alt="Light" />
+                <img src=https://kibibytium.github.io/feather/moon.svg id="moon-icon" alt="Dark" />
+            </a>
+
+            <!-- Inititialize the theme toggle icons -->
+            <script>updateItemToggleTheme()</script>
+        
+    </nav>
+</header>
+
+
+        
+        
+    
+<main>
+    <article>
+        <div class="title">
+            
+            
+    <div class="page-header">
+        The Setup Architecture of Nextcloud&#x27;s AppApi Deploy Daemon<span class="primary-color" style="font-size: 1.6em">.</span>
+    </div>
+
+
+                <div class="meta">
+                    
+                        Posted on <time>2026-03-12</time>
+                    
+
+                    
+                        :: Updated on <time>2026-03-12</time>
+                    
+
+                    
+
+                    
+                    
+                            <span class="tags-label"> :: Tags:</span>
+                            <span class="tags">
+                                    <a href="https://kibibytium.github.io/tags/architecture/" class="post-tag">architecture</a>, 
+                                
+                                    <a href="https://kibibytium.github.io/tags/sysadmin/" class="post-tag">sysadmin</a>, 
+                                
+                                    <a href="https://kibibytium.github.io/tags/docker/" class="post-tag">docker</a>, 
+                                
+                                    <a href="https://kibibytium.github.io/tags/advanced/" class="post-tag">advanced</a>
+                                
+                            </span>
+                    
+
+                    
+                    
+
+                    
+
+                </div>
+        </div>
+
+        
+
+        
+        
+        
+            <div class="toc-container">
+                <h1 class="toc-title">Table of Contents</h1>
+                <ul class="toc-list">
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/nextcloud-appapi-arch/#the-goal">The Goal</a>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/nextcloud-appapi-arch/#prerequisites">Prerequisites</a>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/nextcloud-appapi-arch/#a-note">A Note</a>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/nextcloud-appapi-arch/#networking">Networking</a>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/nextcloud-appapi-arch/#reverse-proxy">Reverse Proxy</a>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/nextcloud-appapi-arch/#a-diagram">A Diagram</a>
+                            
+                        </li>
+                    
+                        <li>
+                            <a href="https://kibibytium.github.io/posts/nextcloud-appapi-arch/#more-details">More Details</a>
+                            
+                        </li>
+                    
+                </ul>
+            </div>
+        
+        
+
+        <section class="body">
+            <h2 id="the-goal"><a class="zola-anchor" href="#the-goal" aria-label="Anchor link for: the-goal">The Goal</a></h2>
+<p>This document explains the required architecture of a Nextcloud installation in order to be able to deploy External Apps (ExApps) via the new AppApi.</p>
+<p>This is less of a how-to guide and more about teaching you how to catch fish (docker is a whale... get it?. Sorry)</p>
+<p>The setup can be confusing because several containers and services must communicate with each other correctly. This guide aims to provide a clear overview of the required architecture and describes which containers need to connect to each other and how that communication is configured.</p>
+<p>The HaRP proxy itself runs in a docker container, but the rest of the parts do not have to. For simplicity's sake however, you can
+assume that each of the parts listed below runs in its own container.</p>
+<h2 id="prerequisites"><a class="zola-anchor" href="#prerequisites" aria-label="Anchor link for: prerequisites">Prerequisites</a></h2>
+<ul>
+<li>Nextcloud: Your nextcloud installation</li>
+<li>Reverse Proxy: The web server through which you access nextcloud. Whether Nginx, Apache, Traefik, Caddy, NPM, etc.</li>
+<li>HaRP: installed as docker container.</li>
+<li>A docker network for ExApps installed by HaRP</li>
+</ul>
+<h2 id="a-note"><a class="zola-anchor" href="#a-note" aria-label="Anchor link for: a-note">A Note</a></h2>
+<p>This is one of these things that you have to figure our through trial and error.</p>
+<p>After you have installed HaRP, try registering it in your Nextcloud under Admin Settings &gt; AppApi &gt; Deploy Daemon.</p>
+<ul>
+<li>Use the "Check Connection" button when registering the daemon to make sure Nextcloud can reach it.</li>
+<li>Click the three dots next the deploy daemon and try the "Test Deploy"</li>
+<li>Check Nextcloud's Logs while the test deploy runs.</li>
+<li>Check the logs from the test container. It is ususally called <code>nc_app_test-deploy</code>. You can use <code>docker logs -f nc_app_test-deploy</code>. This will tell you if the deployed app fails to reach HaRP or Nextcloud.</li>
+<li>Check the logs from the HaRP container.</li>
+</ul>
+<h2 id="networking"><a class="zola-anchor" href="#networking" aria-label="Anchor link for: networking">Networking</a></h2>
+<ul>
+<li>The reverse proxy obviously must be able to reach both Nextcloud and HaRP.</li>
+<li>Nextcloud must be able to reach HaRP, for example internlly on a docker network. HaRP does not care if is it installed on a different host machine than Nextcloud and allows access via HTTPS.</li>
+<li>HaRP must be able to reach the apps it deploys. When you register the deploy daemon in Nextcloud, you can specify any docker network to be used for this.</li>
+<li>HaRP must be able to access Nextcloud using its <em><strong>public URL</strong></em>. If you are using non-FQDNS, or simply, if HaRP cannot resolve your Nextcloud's URL, make sure to configure its <code>/etc/hosts</code> file or configure the container to use a DNS server which can resolve the domain.</li>
+<li>The deployed ExApps must be able to access Nextcloud via the public URL as well.</li>
+</ul>
+<h2 id="reverse-proxy"><a class="zola-anchor" href="#reverse-proxy" aria-label="Anchor link for: reverse-proxy">Reverse Proxy</a></h2>
+<ul>
+<li>Routes requsts to Nextcloud: <code>https://cloud.mydomain.com/index.php/...</code></li>
+<li>Routes requests to the subpath /exapps to HaRP at port 8780 (<code>https://cloud.mydomain.com/exapps/...</code>)</li>
+<li>Sets correct headers for HaRP: like, <code>Host</code> and <code>X-Forwarded-For</code></li>
+</ul>
+<h2 id="a-diagram"><a class="zola-anchor" href="#a-diagram" aria-label="Anchor link for: a-diagram">A Diagram</a></h2>
+<p>Here is a diagram:</p>
+<p><img src="/img/nc-harp-net-flow.png" alt="diagram" /></p>
+<h2 id="more-details"><a class="zola-anchor" href="#more-details" aria-label="Anchor link for: more-details">More Details</a></h2>
+<p>For more concrete examples and up-to-date documentation, please refer to Nextcloud's HaRP repository here: <a rel="external" href="https://github.com/nextcloud/HaRP">https://github.com/nextcloud/HaRP</a></p>
+<!--@startuml
+skinparam actorStyle awesome
+autonumber
+
+actor User
+participant "Reverse Proxy" as Proxy
+participant "Nextcloud" as NC
+participant "HaRP (Daemon)" as HaRP
+participant "ExApp Container" as App
+
+== Standard Traffic ==
+User -> Proxy: Request cloud.mydomain.com
+Proxy -> NC: Forward to Nextcloud (Port 80/443)
+NC -> User: Response
+
+== ExApp Traffic ==
+User -> Proxy: Request cloud.mydomain.com/exapps/my-app
+Proxy -> HaRP: Forward /exapps to Port 8780
+HaRP -> App: Internal Docker Network routing
+App -> HaRP: Response
+HaRP -> User: Response via Proxy
+
+== HaRP/ExApp to Nextcloud ==
+note over HaRP, App: Both need to reach Nextcloud via Public URL
+HaRP -> Proxy: Auth Check (https://cloud.mydomain.com)
+App -> Proxy: API Call (https://cloud.mydomain.com)
+Proxy -> NC: Internal Forward
+@enduml-->
+
+        </section>
+    </article>
+</main>
+
+
+
+        
+            
+        
+
+        
+    </div>
+</body>
+
+</html>
