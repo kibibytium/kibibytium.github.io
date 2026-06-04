@@ -17,6 +17,10 @@
         <loc>https://kibibytium.github.io/posts/page/1/</loc>
     </url>
     <url>
+        <loc>https://kibibytium.github.io/posts/post-quantum-crypto-sales-pitch/</loc>
+        <lastmod>2026-06-05</lastmod>
+    </url>
+    <url>
         <loc>https://kibibytium.github.io/posts/remainder-theorem/</loc>
         <lastmod>2025-01-28</lastmod>
     </url>
@@ -30,13 +34,22 @@
         <loc>https://kibibytium.github.io/tags/architecture/</loc>
     </url>
     <url>
+        <loc>https://kibibytium.github.io/tags/cryptography/</loc>
+    </url>
+    <url>
         <loc>https://kibibytium.github.io/tags/docker/</loc>
     </url>
     <url>
         <loc>https://kibibytium.github.io/tags/mathematics/</loc>
     </url>
     <url>
+        <loc>https://kibibytium.github.io/tags/privacy/</loc>
+    </url>
+    <url>
         <loc>https://kibibytium.github.io/tags/puzzle/</loc>
+    </url>
+    <url>
+        <loc>https://kibibytium.github.io/tags/sales-pitch/</loc>
     </url>
     <url>
         <loc>https://kibibytium.github.io/tags/sysadmin/</loc>

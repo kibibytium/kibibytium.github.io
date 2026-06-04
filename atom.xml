@@ -4,8 +4,34 @@
     <link rel="self" type="application/atom+xml" href="https://kibibytium.github.io/atom.xml"/>
     <link rel="alternate" type="text/html" href="https://kibibytium.github.io"/>
     <generator uri="https://www.getzola.org/">Zola</generator>
-    <updated>2026-03-12T00:00:00+00:00</updated>
+    <updated>2026-06-05T00:00:00+00:00</updated>
     <id>https://kibibytium.github.io/atom.xml</id>
+    <entry xml:lang="en">
+        <title>The Necessity of Post-Quantum Cryptography - A Sales Pitch</title>
+        <published>2026-06-05T00:00:00+00:00</published>
+        <updated>2026-06-05T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://kibibytium.github.io/posts/post-quantum-crypto-sales-pitch/"/>
+        <id>https://kibibytium.github.io/posts/post-quantum-crypto-sales-pitch/</id>
+        
+        <content type="html" xml:base="https://kibibytium.github.io/posts/post-quantum-crypto-sales-pitch/">&lt;h1 id=&quot;the-pitch&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#the-pitch&quot; aria-label=&quot;Anchor link for: the-pitch&quot;&gt;The Pitch&lt;&#x2F;a&gt;&lt;&#x2F;h1&gt;
+&lt;p&gt;If you use the internet, you rely on cryptography. More specifically, you use algorithms that are susceptible to breaking when a sufficiently powerful quantum computer is ready. This isn&#x27;t merely a future threat; it is an immediate one. Why? Because intelligence agencies currently employ a strategy called &quot;store now, decrypt later,&quot; which means exactly what you think: anything transmitted over the internet — whether stored or not and whether encrypted or not — is potentially insecure. Passwords, pictures, entire calls, conversations, and financial data are all at risk.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;the-why&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#the-why&quot; aria-label=&quot;Anchor link for: the-why&quot;&gt;The Why&lt;&#x2F;a&gt;&lt;&#x2F;h1&gt;
+&lt;p&gt;Modern cryptography relies on the computational difficulty of factoring very large numbers (products of two large prime numbers). However, quantum computers are extremely efficient at this task, a capability that fundamentally renders modern, widely used cryptographic methods insecure. Post-quantum cryptography (PQC) algorithms address this by being based not on number factorization, but on completely different mathematical foundations. These new systems are mathematically proven to be resistant to both classical and quantum computer attacks.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;the-how&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#the-how&quot; aria-label=&quot;Anchor link for: the-how&quot;&gt;The How&lt;&#x2F;a&gt;&lt;&#x2F;h1&gt;
+&lt;p&gt;We already know how these current encryption algorithms can be broken. A specific algorithm designed for quantum computers can factorize very large numbers exponentially faster than any traditional supercomputer. This algorithm already exists, and it is
+called Shor&#x27;s algorithm.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
     <entry xml:lang="en">
         <title>The Setup Architecture of Nextcloud&#x27;s AppApi Deploy Daemon</title>
         <published>2026-03-12T00:00:00+00:00</published>
