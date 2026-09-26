@@ -1,41 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://kibibytium.github.io/</loc>
+        <loc>https://kibibytium.net/</loc>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/about/</loc>
+        <loc>https://kibibytium.net/posts/</loc>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/posts/</loc>
-    </url>
-    <url>
-        <loc>https://kibibytium.github.io/posts/nextcloud-appapi-arch/</loc>
+        <loc>https://kibibytium.net/posts/nextcloud-appapi-arch/</loc>
         <lastmod>2026-03-12</lastmod>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/posts/page/1/</loc>
+        <loc>https://kibibytium.net/posts/page/1/</loc>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/posts/remainder-theorem/</loc>
+        <loc>https://kibibytium.net/posts/remainder-theorem/</loc>
         <lastmod>2025-01-28</lastmod>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/tags/</loc>
+        <loc>https://kibibytium.net/tags/</loc>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/tags/advanced/</loc>
+        <loc>https://kibibytium.net/tags/advanced/</loc>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/tags/architecture/</loc>
+        <loc>https://kibibytium.net/tags/architecture/</loc>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/tags/docker/</loc>
+        <loc>https://kibibytium.net/tags/docker/</loc>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/tags/mathematics/</loc>
+        <loc>https://kibibytium.net/tags/mathematics/</loc>
     </url>
     <url>
-        <loc>https://kibibytium.github.io/tags/sysadmin/</loc>
+        <loc>https://kibibytium.net/tags/sysadmin/</loc>
     </url>
 </urlset>
