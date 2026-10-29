@@ -4,8 +4,53 @@
     <link rel="self" type="application/atom+xml" href="https://kibibytium.net/atom.xml"/>
     <link rel="alternate" type="text/html" href="https://kibibytium.net"/>
     <generator uri="https://www.getzola.org/">Zola</generator>
-    <updated>2026-03-12T00:00:00+00:00</updated>
+    <updated>2026-10-26T00:00:00+00:00</updated>
     <id>https://kibibytium.net/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Stonebridge: Tuta Mail for Self-Hosted Apps</title>
+        <published>2026-10-26T00:00:00+00:00</published>
+        <updated>2026-10-26T00:00:00+00:00</updated>
+        
+        <author>
+          <name>Unknown</name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://kibibytium.net/posts/stone-bridge/"/>
+        <id>https://kibibytium.net/posts/stone-bridge/</id>
+        
+        <content type="html" xml:base="https://kibibytium.net/posts/stone-bridge/">&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Not&lt;/strong&gt; for email clients (like Thunderbird).&lt;/li&gt;
+&lt;li&gt;Only supports &lt;strong&gt;sending&lt;/strong&gt; emails (for scripts or self-hosted apps).&lt;/li&gt;
+&lt;li&gt;Still in beta.&lt;/li&gt;
+&lt;li&gt;Not an official Tuta project.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;stonebridge&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#stonebridge&quot; aria-label=&quot;Anchor link for: stonebridge&quot;&gt;Stonebridge&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;I self-host almost everything except for email, as I feel at peace having my email hosted with Tuta.&lt;/p&gt;
+&lt;p&gt;Due to the end-to-end encrypted nature of Tuta Mail, it does not support standard SMTP.
+While great for security, this makes it difficult to use Tuta for automated homelab emails.&lt;/p&gt;
+&lt;p&gt;To solve this, I built &lt;a rel=&quot;external&quot; href=&quot;https://github.com/kibibytium/stonebridge&quot;&gt;Stonebridge&lt;/a&gt;: an SMTP bridge for Tuta Mail.&lt;/p&gt;
+&lt;p&gt;Stonebridge does &lt;em&gt;NOT&lt;/em&gt; serve as a bridge for full email clients like Thunderbird. Its sole purpose is to enable automated emails for your homelab. In other words, it allows self-hosted services - like Nextcloud or Immich — to send notification emails to users via a Tuta account.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Disclaimer: While I do work at Tuta, this is an unofficial personal project created to scratch my own itch.&lt;/em&gt;&lt;/p&gt;
+&lt;h1 id=&quot;how-it-works&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#how-it-works&quot; aria-label=&quot;Anchor link for: how-it-works&quot;&gt;How it works&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;The architecture of the project is split into two components: &lt;code&gt;stone-bridge&lt;/code&gt; (the SMTP server) and &lt;code&gt;tuta-bridge&lt;/code&gt; (the client).&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;stone-bridge&lt;/code&gt;&lt;/strong&gt; accepts incoming SMTP messages from your self-hosted apps and parses the MIME data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;tuta-bridge&lt;/code&gt;&lt;/strong&gt; is a minimal, logged-in Tuta CLI client. It receives the parsed message over a Unix socket and dispatches it as an email through Tuta.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Both the SMTP server and the MIME parser are built from scratch. I have implemented enough for them to be stable and cover the most common use cases, though they are not yet feature-complete. I expect plenty of edge cases to pop up in the future.&lt;/p&gt;
+&lt;p&gt;Building a lightweight client like &lt;code&gt;tuta-bridge&lt;/code&gt; that runs in the Node.js runtime only recently became possible, thanks to ongoing modularization efforts in the main &lt;code&gt;tutanota&lt;/code&gt; codebase.&lt;/p&gt;
+&lt;p&gt;If you try Stonebridge out and run into unsupported formats, bugs, or questions, please feel free to open an issue on &lt;a rel=&quot;external&quot; href=&quot;https://github.com/kibibytium/stonebridge/issues&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;trivia&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#trivia&quot; aria-label=&quot;Anchor link for: trivia&quot;&gt;Trivia&lt;/a&gt;&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;This is the second iteration of the project. My first approach used the Tuta Rust SDK, but it was missing a few features required for sending emails. Since we at Tuta are shifting focus away from that SDK anyway, I decided to go with a more future-proof TypeScript option.&lt;/li&gt;
+&lt;li&gt;The name &lt;em&gt;Stonebridge&lt;/em&gt; is an obscure reference to Robert Jordan&#39;s &lt;em&gt;The Wheel of Time&lt;/em&gt;. Let me know if you get it :)&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+        
+    </entry>
     <entry xml:lang="en">
         <title>The Setup Architecture of Nextcloud&#39;s AppApi Deploy Daemon</title>
         <published>2026-03-12T00:00:00+00:00</published>

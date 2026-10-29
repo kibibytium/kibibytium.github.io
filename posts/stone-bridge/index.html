@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="en" class="dark light">
+
+    
+<head>
+    
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="base" content="https://kibibytium.net" />
+
+    
+
+    
+
+    
+    
+    
+        <title>
+            
+                Stonebridge: Tuta Mail for Self-Hosted Apps
+            
+        </title>
+
+        
+            <meta property="og:title"
+                  content="Stonebridge: Tuta Mail for Self-Hosted Apps" />
+        
+    
+
+    
+        
+    
+
+    
+        
+    
+
+    
+    
+
+    
+    
+        <link href=https://kibibytium.net/fonts.css rel="stylesheet" />
+    
+
+    
+    
+
+    
+    
+
+    
+    
+        <script defer src=https://kibibytium.net/js/toc.js></script>
+    
+
+    
+    
+
+    
+        <script>
+            MathJax = {
+                tex: {
+                    inlineMath: [
+                        ['$', '$'],
+                        ['\\(', '\\)']
+                    ]
+                }
+            };
+        </script>
+    
+
+    
+    
+        
+            
+                <link rel="alternate"
+                      type="application/atom+xml"
+                      title="
+(KiB)ibytium
+"
+                      href="https://kibibytium.net/atom.xml" />
+            
+        
+    
+
+
+    
+
+    
+    
+
+    
+    
+        <link rel="stylesheet"
+              type="text/css"
+              href="https://kibibytium.net/theme/light.css" />
+        <link id="darkModeStyle"
+              rel="stylesheet"
+              type="text/css"
+              href="https://kibibytium.net/theme/dark.css" />
+    
+
+    
+        
+            <script>
+                var themeToggleMode = "toggle";
+            </script>
+        
+        <script src=https://kibibytium.net/js/themetoggle.js></script>
+
+        
+            <script>
+                setTheme(getSavedTheme());
+            </script>
+        
+    
+
+
+    <link rel="stylesheet"
+          type="text/css"
+          media="screen"
+          href="https://kibibytium.net/main.css" />
+
+    
+
+    
+        <script defer
+                src="https://kibibytium.net/js/searchElasticlunr.min.js?h=3626c0ef99daa745b31e"></script>
+
+</head>
+
+
+    <body>
+        
+
+        <div class="left-content">
+            
+            
+        </div>
+
+        <div class="content">
+            <nav>
+    <div class="left-nav">
+        
+            <a href=https://kibibytium.net>(KiB)ibytium</a>
+        
+
+
+        <div class="socials">
+            
+                
+            
+            
+                <a rel='me' href="https://github.com/kibibytium/" class="social">
+                    <img alt="github"
+                         src="https://kibibytium.net/icons/social/github.svg" />
+                </a>
+            
+        </div>
+    </div>
+
+    <div class="right-nav">
+        
+            <a href=https://kibibytium.net/posts style="margin-right: 0.5em">/posts</a>
+        
+            <a href=https://kibibytium.net/tags style="margin-right: 0.5em">/tags</a>
+        
+
+        
+            <button id="search-button"
+                    class="search-button"
+                    title="$SHORTCUT to open search">
+                <img src="https://kibibytium.net/icons/search.svg"
+                     alt="Search"
+                     class="search-icon" />
+            </button>
+
+            <div id="searchModal"
+                 class="search-modal js"
+                 role="dialog"
+                 aria-labelledby="modalTitle">
+                <div id="modal-content">
+                    <h1 id="modalTitle" class="page-header">
+                        Search
+                    </h1>
+                    <div id="searchBar">
+                        <input id="searchInput"
+                               role="combobox"
+                               autocomplete="off"
+                               spellcheck="false"
+                               aria-expanded="false"
+                               aria-controls="results-container"
+                               placeholder="Search..." />
+                        <button id="clear-search" class="clear-button" title="Clear search">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="results-container">
+                        <div id="results-info">
+                            <span id="zero_results" style="display: none;">No results</span>
+                            <span id="one_result" style="display: none;">1 result</span>
+                            <span id="many_results" style="display: none;">$NUMBER results</span>
+                        </div>
+                        <div id="results" role="listbox">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+
+        
+        
+            <a id="dark-mode-toggle"
+               onclick="toggleTheme(); event.preventDefault();"
+               href="#">
+                <img src="https://kibibytium.net/icons/sun.svg" id="sun-icon" alt="Light" />
+                <img src="https://kibibytium.net/icons/moon.svg"
+                     id="moon-icon"
+                     style="filter: invert(1)"
+                     alt="Dark" />
+                
+            </a>
+
+            <!-- Initialize the theme toggle icons -->
+            <script>
+                updateItemToggleTheme()
+            </script>
+        
+    </div>
+</nav>
+
+
+            
+            
+    
+<div class="visible-element-observer-root" data-selector="main article p">
+    <main>
+        <article>
+            <div class="title">
+                
+                
+
+    <div class="page-header">
+        Stonebridge: Tuta Mail for Self-Hosted Apps
+    </div>
+
+
+
+                <div class="meta">
+                    
+                        Posted on <time>2026-10-26</time>
+                    
+
+
+                    
+
+                    
+
+                    
+
+                    
+                    
+
+                    
+                    
+
+                    
+                    
+                        <span class="tags-label">::</span>
+                        <span class="tags">
+                                <a href="https://kibibytium.net/tags/project/"
+                                   class="post-tag">project</a>
+                            
+                                <a href="https://kibibytium.net/tags/selfhosting/"
+                                   class="post-tag">selfhosting</a>
+                            
+                                <a href="https://kibibytium.net/tags/smtp/"
+                                   class="post-tag">smtp</a>
+                            
+                                <a href="https://kibibytium.net/tags/tuta/"
+                                   class="post-tag">tuta</a>
+                            
+                        </span>
+                    
+
+                    
+
+                </div>
+            </div>
+
+            
+
+            <section class="body">
+                <blockquote>
+<p><strong>tl;dr</strong></p>
+<ul>
+<li><strong>Not</strong> for email clients (like Thunderbird).</li>
+<li>Only supports <strong>sending</strong> emails (for scripts or self-hosted apps).</li>
+<li>Still in beta.</li>
+<li>Not an official Tuta project.</li>
+</ul>
+</blockquote>
+<h1 id="stonebridge"><a class="zola-anchor" href="#stonebridge" aria-label="Anchor link for: stonebridge">Stonebridge</a></h1>
+<p>I self-host almost everything except for email, as I feel at peace having my email hosted with Tuta.</p>
+<p>Due to the end-to-end encrypted nature of Tuta Mail, it does not support standard SMTP.
+While great for security, this makes it difficult to use Tuta for automated homelab emails.</p>
+<p>To solve this, I built <a rel="external" href="https://github.com/kibibytium/stonebridge">Stonebridge</a>: an SMTP bridge for Tuta Mail.</p>
+<p>Stonebridge does <em>NOT</em> serve as a bridge for full email clients like Thunderbird. Its sole purpose is to enable automated emails for your homelab. In other words, it allows self-hosted services - like Nextcloud or Immich — to send notification emails to users via a Tuta account.</p>
+<p><em>Disclaimer: While I do work at Tuta, this is an unofficial personal project created to scratch my own itch.</em></p>
+<h1 id="how-it-works"><a class="zola-anchor" href="#how-it-works" aria-label="Anchor link for: how-it-works">How it works</a></h1>
+<p>The architecture of the project is split into two components: <code>stone-bridge</code> (the SMTP server) and <code>tuta-bridge</code> (the client).</p>
+<ol>
+<li><strong><code>stone-bridge</code></strong> accepts incoming SMTP messages from your self-hosted apps and parses the MIME data.</li>
+<li><strong><code>tuta-bridge</code></strong> is a minimal, logged-in Tuta CLI client. It receives the parsed message over a Unix socket and dispatches it as an email through Tuta.</li>
+</ol>
+<p>Both the SMTP server and the MIME parser are built from scratch. I have implemented enough for them to be stable and cover the most common use cases, though they are not yet feature-complete. I expect plenty of edge cases to pop up in the future.</p>
+<p>Building a lightweight client like <code>tuta-bridge</code> that runs in the Node.js runtime only recently became possible, thanks to ongoing modularization efforts in the main <code>tutanota</code> codebase.</p>
+<p>If you try Stonebridge out and run into unsupported formats, bugs, or questions, please feel free to open an issue on <a rel="external" href="https://github.com/kibibytium/stonebridge/issues">GitHub</a>.</p>
+<h1 id="trivia"><a class="zola-anchor" href="#trivia" aria-label="Anchor link for: trivia">Trivia</a></h1>
+<ul>
+<li>This is the second iteration of the project. My first approach used the Tuta Rust SDK, but it was missing a few features required for sending emails. Since we at Tuta are shifting focus away from that SDK anyway, I decided to go with a more future-proof TypeScript option.</li>
+<li>The name <em>Stonebridge</em> is an obscure reference to Robert Jordan's <em>The Wheel of Time</em>. Let me know if you get it :)</li>
+</ul>
+
+            </section>
+        </article>
+    </main>
+</div>
+
+
+
+            
+                
+            
+
+            
+        </div>
+
+        <div class="right-content">
+            
+    
+    
+        <div class="toc">
+    <div class="heading">
+        Table of Contents
+    </div>
+    <ul class="toc-list">
+        
+            <li class="parent">
+                
+                <a href="https://kibibytium.net/posts/stone-bridge/#stonebridge">Stonebridge</a>
+
+                
+            </li>
+        
+            <li class="parent">
+                
+                <a href="https://kibibytium.net/posts/stone-bridge/#how-it-works">How it works</a>
+
+                
+            </li>
+        
+            <li class="parent">
+                
+                <a href="https://kibibytium.net/posts/stone-bridge/#trivia">Trivia</a>
+
+                
+            </li>
+        
+    </ul>
+</div>
+
+    
+
+        </div>
+        
+
+    </body>
+
+</html>
